@@ -7,33 +7,7 @@ import {
   TriangleAlert,
   LoaderCircle,
 } from "lucide-react";
-
-const analyses = [
-  {
-    id: "1",
-    fileName: "supplier-agreement.pdf",
-    status: "ready",
-    updatedAt: "15 Aug 2026",
-  },
-  {
-    id: "2",
-    fileName: "invoice-august.pdf",
-    status: "processing",
-    updatedAt: "15 Aug 2026",
-  },
-  {
-    id: "3",
-    fileName: "service-contract.pdf",
-    status: "confirmed",
-    updatedAt: "14 Aug 2026",
-  },
-  {
-    id: "4",
-    fileName: "invoice-004.pdf",
-    status: "failed",
-    updatedAt: "13 Aug 2026",
-  },
-];
+import { Analysis } from "@/types/analysis";
 
 const statusConfig = {
   ready: {
@@ -57,8 +31,10 @@ const statusConfig = {
     className: "bg-red-50 text-red-700",
   },
 };
-
-export default function AnalysesPage() {
+type AnalysisDetailsProps = {
+  analyses: Analysis[];
+};
+export default function AnalysisList({ analyses }: AnalysisDetailsProps) {
   return (
     <main className="min-h-screen bg-[#f7f8f8] px-6 py-10">
       <div className="mx-auto max-w-5xl">
@@ -107,7 +83,7 @@ export default function AnalysesPage() {
 
                     <div>
                       <p className="text-sm font-medium text-gray-900">
-                        {analysis.fileName}
+                        {analysis.title}
                       </p>
 
                       <p className="mt-0.5 text-xs text-gray-400">

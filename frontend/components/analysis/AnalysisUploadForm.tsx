@@ -1,37 +1,40 @@
 "use client";
 
 import { useState } from "react";
-import {
-  ChevronLeft,
-  FileText,
-  MoveLeft,
-  StepBack,
-  Upload,
-  X,
-} from "lucide-react";
+import { ChevronLeft, FileText, Upload, X } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
-export default function NewAnalysisPage() {
+export default function AnalysisUploadForm() {
+  const router = useRouter();
   const [file, setFile] = useState<File | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setIsLoading(true);
 
     if (!file) return;
+    try {
+      const formData = new FormData();
+      formData.append("file", file);
+      console.log("FormData entries:", [...formData.entries()]);
+      const response = await fetch("http://localhost:4000/analyses", {
+        method: "POST",
+        body: formData,
+      });
 
-    const formData = new FormData(e.currentTarget);
+      if (!response.ok) {
+        throw new Error("Upload failed");
+      }
 
-    const res = await fetch("http://localhost:4000/analysis/new", {
-      method: "POST",
-      body: formData,
-    });
-
-    if (!res.ok) {
-      throw new Error("Upload failed");
+      const createdAnalysis = await response.json();
+      router.push(`/analyses/${createdAnalysis.id}`);
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setIsLoading(false);
     }
-
-    const data = await res.json();
-    console.log(data);
   };
 
   return (
@@ -109,7 +112,7 @@ export default function NewAnalysisPage() {
           <div className="mt-6 flex justify-end">
             <button
               type="submit"
-              disabled={!file}
+              disabled={!file || isLoading}
               className="rounded-lg bg-[#44777d] px-5 py-2.5 text-sm font-medium text-white transition hover:bg-[#37666b] disabled:cursor-not-allowed disabled:opacity-40 cursor-pointer"
             >
               Analyse document

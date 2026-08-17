@@ -1,9 +1,3 @@
-import AnalysesPage from "@/components/AnalysesPage";
-
-export default function Home() {
-  return (
-    <div>
-      <AnalysesPage />
-    </div>
-  );
+export default function HomePage() {
+  return <div></div>;
 }

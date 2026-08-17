@@ -1,7 +1,15 @@
-import React from "react";
+import AnalysisDetails from "@/components/analysis/AnalysisDetails";
+import { getAnalysisById } from "@/lib/analyses";
 
-function page() {
-  return <div>page</div>;
+export default async function AnalysisDetailsPage({
+  params,
+}: PageProps<"/analyses/[id]">) {
+  const { id } = await params;
+  const analysis = await getAnalysisById(id);
+
+  return (
+    <div>
+      <AnalysisDetails analysis={analysis} />
+    </div>
+  );
 }
-
-export default page;

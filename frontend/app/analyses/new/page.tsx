@@ -1,12 +1,9 @@
-import AddNewAnalysis from "@/components/AddNewAnalysis";
-import React from "react";
+import AnalysisUploadForm from "@/components/analysis/AnalysisUploadForm";
 
-const page = () => {
+export default function NewAnalysisPage() {
   return (
     <div>
-      <AddNewAnalysis />
+      <AnalysisUploadForm />
     </div>
   );
-};
-
-export default page;
+}

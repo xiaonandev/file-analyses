@@ -1,7 +1,11 @@
-import React from "react";
+import AnalysisList from "@/components/analysis/AnalysisList";
+import { getAnalyses } from "@/lib/analyses";
 
-const page = () => {
-  return <div>page</div>;
-};
-
-export default page;
+export default async function AnalysesPage() {
+  const analyses = await getAnalyses();
+  return (
+    <div>
+      <AnalysisList analyses={analyses} />
+    </div>
+  );
+}
