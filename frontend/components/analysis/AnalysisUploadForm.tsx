@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { ChevronLeft, FileText, Upload, X } from "lucide-react";
+import { ChevronLeft, Image as ImageIcon, Upload, X } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
@@ -9,12 +9,14 @@ export default function AnalysisUploadForm() {
   const router = useRouter();
   const [file, setFile] = useState<File | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const handleSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setIsLoading(true);
 
     if (!file) return;
+    setError(null);
+    setIsLoading(true);
     try {
       const formData = new FormData();
       formData.append("file", file);
@@ -25,14 +27,15 @@ export default function AnalysisUploadForm() {
       });
 
       if (!response.ok) {
-        throw new Error("Upload failed");
+        const body = await response.json().catch(() => null);
+        throw new Error(body?.message ?? "Upload failed");
       }
 
       const createdAnalysis = await response.json();
       router.push(`/analyses/${createdAnalysis.id}`);
     } catch (err) {
-      console.log(err);
-    } finally {
+      console.error(err);
+      setError(err instanceof Error ? err.message : "Upload failed");
       setIsLoading(false);
     }
   };
@@ -41,7 +44,7 @@ export default function AnalysisUploadForm() {
     <main className="min-h-screen bg-[#f7f8f8] px-6 py-10">
       <div className="mx-auto max-w-3xl">
         <Link
-          href="/"
+          href="/analyses"
           className="flex gap-2 items-center text-sm text-gray-500 hover:text-gray-700"
         >
           <ChevronLeft width={16} /> <p>Back to analyses</p>
@@ -64,20 +67,33 @@ export default function AnalysisUploadForm() {
               <Upload size={30} className="text-gray-400" />
 
               <p className="mt-4 text-sm font-medium text-gray-800">
-                Upload a document
+                Upload an invoice image
               </p>
 
               <p className="mt-1 text-sm text-gray-500">
-                Choose a PDF, PNG or JPEG
+                Choose a PNG or JPEG image
               </p>
 
               <input
                 className="hidden"
                 name="file"
                 type="file"
-                accept=".pdf,image/png,image/jpeg"
+                accept="image/png,image/jpeg"
                 onChange={(e) => {
-                  setFile(e.target.files?.[0] ?? null);
+                  const selectedFile = e.target.files?.[0] ?? null;
+
+                  if (
+                    selectedFile &&
+                    !["image/png", "image/jpeg"].includes(selectedFile.type)
+                  ) {
+                    setFile(null);
+                    setError("Only PNG and JPEG images are supported.");
+                    e.target.value = "";
+                    return;
+                  }
+
+                  setError(null);
+                  setFile(selectedFile);
                 }}
               />
             </label>
@@ -85,7 +101,7 @@ export default function AnalysisUploadForm() {
             <div className="flex items-center justify-between rounded-xl border border-gray-200 p-4">
               <div className="flex items-center gap-3">
                 <div className="flex h-11 w-11 items-center justify-center rounded-lg bg-gray-100">
-                  <FileText size={20} className="text-gray-500" />
+                  <ImageIcon size={20} className="text-gray-500" />
                 </div>
 
                 <div>
@@ -101,13 +117,16 @@ export default function AnalysisUploadForm() {
 
               <button
                 type="button"
+                disabled={isLoading}
                 onClick={() => setFile(null)}
-                className="rounded-lg p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-700 hover:cursor-pointer"
+                className="rounded-lg p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-700 cursor-pointer disabled:pointer-events-none disabled:opacity-40"
               >
                 <X size={17} />
               </button>
             </div>
           )}
+
+          {error && <p className="mt-3 text-sm text-red-600">{error}</p>}
 
           <div className="mt-6 flex justify-end">
             <button
@@ -115,7 +134,7 @@ export default function AnalysisUploadForm() {
               disabled={!file || isLoading}
               className="rounded-lg bg-[#44777d] px-5 py-2.5 text-sm font-medium text-white transition hover:bg-[#37666b] disabled:cursor-not-allowed disabled:opacity-40 cursor-pointer"
             >
-              Analyse document
+              Analyse image
             </button>
           </div>
         </form>
