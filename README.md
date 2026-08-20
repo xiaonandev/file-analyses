@@ -1,4 +1,4 @@
-# Invoice Analyzer
+# Invoice Analyser
 
 A full-stack invoice analysis application built with Next.js, Express, PostgreSQL, and AWS.
 
