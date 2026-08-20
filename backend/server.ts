@@ -15,6 +15,8 @@ app.use(express.json());
 
 app.use("/analyses", analysesRouter);
 
-app.listen(4000, () => {
-  console.log("Server running at http://localhost:4000");
+const port = Number(process.env.PORT) || 4000;
+
+app.listen(port, "0.0.0.0", () => {
+  console.log(`Server running on port ${port}`);
 });
