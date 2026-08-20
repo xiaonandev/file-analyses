@@ -4,6 +4,7 @@ import { useState } from "react";
 import { ChevronLeft, Image as ImageIcon, Upload, X } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { API_URL } from "@/lib/api";
 
 export default function AnalysisUploadForm() {
   const router = useRouter();
@@ -21,7 +22,7 @@ export default function AnalysisUploadForm() {
       const formData = new FormData();
       formData.append("file", file);
       console.log("FormData entries:", [...formData.entries()]);
-      const response = await fetch("http://localhost:4000/analyses", {
+      const response = await fetch(`${API_URL}/analyses`, {
         method: "POST",
         body: formData,
       });

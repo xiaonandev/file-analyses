@@ -2,6 +2,7 @@
 
 import type { Analysis, InvoiceContent } from "@/types/analysis";
 import { checkAnalysisStatus, updateAnalysis } from "@/lib/analyses";
+import { API_URL } from "@/lib/api";
 import {
   ArrowLeft,
   Check,
@@ -60,7 +61,7 @@ const AnalysisDetails = ({ analysis }: AnalysisDetailsProps) => {
 
   const isCompleted = currentAnalysis.status === "completed";
   const isEditing = draft !== null;
-  const documentUrl = `http://localhost:4000/analyses/${currentAnalysis.id}/document`;
+  const documentUrl = `${API_URL}/analyses/${currentAnalysis.id}/document`;
 
   const startEditing = () => {
     if (!currentAnalysis.content) return;

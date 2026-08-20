@@ -1,7 +1,8 @@
 import type { Analysis, InvoiceContent } from "@/types/analysis";
+import { API_URL } from "@/lib/api";
 
 export async function getAnalysisById(id: string): Promise<Analysis> {
-  const response = await fetch(`http://localhost:4000/analyses/${id}`);
+  const response = await fetch(`${API_URL}/analyses/${id}`);
 
   if (!response.ok) {
     throw new Error("Failed to fetch analysis");
@@ -11,7 +12,7 @@ export async function getAnalysisById(id: string): Promise<Analysis> {
 }
 
 export async function getAnalyses(): Promise<Analysis[]> {
-  const response = await fetch(`http://localhost:4000/analyses`);
+  const response = await fetch(`${API_URL}/analyses`);
 
   if (!response.ok) {
     throw new Error("Failed to fetch analyses");
@@ -20,7 +21,7 @@ export async function getAnalyses(): Promise<Analysis[]> {
 }
 
 export async function deleteAnalysisById(id: string): Promise<Analysis> {
-  const response = await fetch(`http://localhost:4000/analyses/${id}`, {
+  const response = await fetch(`${API_URL}/analyses/${id}`, {
     method: "DELETE",
   });
 
@@ -32,7 +33,7 @@ export async function deleteAnalysisById(id: string): Promise<Analysis> {
 
 export async function checkAnalysisStatus(id: string): Promise<Analysis> {
   const response = await fetch(
-    `http://localhost:4000/analyses/${id}/check-status`,
+    `${API_URL}/analyses/${id}/check-status`,
     {
       method: "POST",
     },
@@ -50,7 +51,7 @@ export async function updateAnalysis(
   title: string,
   content: InvoiceContent,
 ): Promise<Analysis> {
-  const response = await fetch(`http://localhost:4000/analyses/${id}`, {
+  const response = await fetch(`${API_URL}/analyses/${id}`, {
     method: "PATCH",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ title, content }),

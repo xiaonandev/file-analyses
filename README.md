@@ -2,8 +2,6 @@
 
 A full-stack invoice analysis application built with Next.js, Express, PostgreSQL, and AWS.
 
-Users can upload an invoice image, wait for Amazon Textract to extract its key fields, and then review or edit the result. The original image is stored privately in Amazon S3 and can be previewed alongside the extracted data.
-
 ## Features
 
 - Upload PNG and JPEG invoice images
@@ -24,10 +22,7 @@ The frontend then polls the backend. Once Textract finishes, the backend saves t
 
 ## Tech stack
 
-- **Frontend:** Next.js 16, React 19, TypeScript, Tailwind CSS
-- **Backend:** Express 5, Node.js, TypeScript, Multer
-- **Database:** PostgreSQL, Prisma ORM
-- **Cloud:** Amazon S3, Amazon Textract
+Next.js · React · TypeScript · Tailwind CSS · Express · PostgreSQL · Prisma · Amazon S3 · Amazon Textract
 
 ## Screenshots
 
